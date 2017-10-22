@@ -1,8 +1,6 @@
 require_relative 'heap'
 
 def k_largest_elements(array, k)
-  # max heap better?
-  # O(nlog(k))
   result = BinaryMinHeap.new
   k.times do
     result.push(array.pop)

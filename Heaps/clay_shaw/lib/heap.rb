@@ -35,7 +35,6 @@ class BinaryMinHeap
   def self.child_indices(len, parent_index)
     # ex: (6, 0) => [1, 2]
     #     (6, 1) => [3, 4]
-    # return [1, 2] if parent_index == 0
     children = []
     left = (parent_index * 2) + 1
     right = (parent_index * 2) + 2
@@ -48,6 +47,8 @@ class BinaryMinHeap
     end
     p children
     return children
+    # ALTERNATIVE SOLUTION
+
   end
 
   def self.parent_index(child_index)
