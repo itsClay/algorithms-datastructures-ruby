@@ -31,9 +31,84 @@ class BinarySearchTree
     end
   end
 
+  def delete_max(node)
+    return nil unless node
+    return node.left unless node.right
+    node.right = delete_max(node.right)
+
+    node
+  end
+
   def delete(value)
     # Hibbard Deletion
-    BinarySearchTree.delete!(@root, value)
+    # BinarySearchTree.delete!(@root, value)
+    # node = find(value)
+    node = find(value)
+    p_node = find_parent(@root, value)
+    return nil unless node
+    # debugger
+    if node.value == value
+
+
+      if node.left.nil? && node.right.nil?
+
+        if p_node.nil?
+          @root = nil
+        else
+          p p_node
+          if value <= p_node.value
+            p_node.left = nil
+          else
+            p_node.right = nil
+          end
+        end
+
+      end
+
+      if node.left.nil? || node.right.nil?
+        if p_node.nil?
+          @root = nil
+        else
+          child_node = node.left || node.right
+          if value <= p_node.value
+            p_node.left = child_node
+          else
+            p_node.right = child_node
+          end
+        end
+      end
+      # return node.left unless node.right
+      # return node.right unless node.left
+
+      # debugger
+      if node.left && node.right
+        left_node = node.left
+
+        r = maximum(node.left)
+        r.right = node.right
+
+        if r.left
+          left_node.right = r.left
+        end
+
+        r.left = left_node
+
+        if value <= p_node.value
+          p_node.left = r
+        else
+          p_node.right = r
+        end
+      end
+      # set replacement new right
+      # set replacement new left while getting rid of itself.
+      # r.left = delete_maximum(node.left)
+
+    # elsif value < node.value
+    #   node.left = delete(node.left, value)
+    # else
+    #   node.right = delete(node.right, value)
+    end
+
   end
 
   # helper method for #delete:
@@ -58,8 +133,16 @@ class BinarySearchTree
   def in_order_traversal(tree_node = @root, arr = [])
   end
 
+  def find_parent(node, value)
+    return nil unless node
+    return nil if node.value == value
+    return node if node.left && node.left.value == value
+    return node if node.right && node.right.value == value
+    find_parent(node.left, value) || find_parent(node.right, value)
 
-  private
+  end
+
+
   # optional helper methods go here:
   def self.insert!(node, value)
     return BSTNode.new(value) unless node
@@ -78,19 +161,48 @@ class BinarySearchTree
     node.value
   end
 
+  def self.max(node)
+    return nil unless node
+    if node.right
+     return max(node.right)
+    end
+    node
+  end
+
+  def self.delete_max(node)
+    return nil unless node
+    return node.left unless node.right
+    node.right = delete_max(node.right)
+
+    node
+  end
+
   def self.delete!(node, value)
     return nil unless node
-
+    # debugger
     if node.value == value
+
+      if node.left.nil? && node.right.nil?
+        # debugger
+        p 'hello?!?!?!'
+        p_node = BinarySearchTree.find_parent(root, value)
+        p p_node
+        if value <= p_node.value
+          node.left = nil
+        else
+          node.right = nil
+        end
+      end
+
       return node.left unless node.right
       return node.right unless node.left
 
-      debugger
-      r = node.left.maximum
-      old_left = r.left
+      # debugger
+      r = max(node.left)
+      # set replacement new right
       r.right = node.right
-      r.left = node.left
-
+      # set replacement new left while getting rid of itself.
+      r.left = delete_max(node.left)
 
       return r
 
@@ -102,5 +214,7 @@ class BinarySearchTree
 
     node
   end
+
+
 
 end
