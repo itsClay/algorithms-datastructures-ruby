@@ -15,9 +15,8 @@ def topological_sort(vertices)
   # step 1 O(|V|)
   vertices.each do |vertex|
     top.push(vertex) if vertex.in_edges.empty?
-
+    # set up our graph
     in_degrees[vertex] = vertex.in_count
-
   end
 
   # put every node/vertex in and then out
@@ -28,25 +27,25 @@ def topological_sort(vertices)
 
     current.out_edges.each do |edge|
       destination = edge.to_vertex
-      # p destination
 
       # take edge out of the graph
       in_degrees[destination] -= 1
-
-
+      # break here if we have a cycle
+      return [] if in_degrees[destination] < 0
 
       if in_degrees[destination] == 0
         top.push(destination)
         # in_degrees[destination] += 1
       end
     end
-    # remove vertex from graph
-    # in_degrees.delete(current)
   end
 
+  # right now just handle duplicates by checking the length of the vertex
+  # array against its sorted
   if sorted.length != vertices.length
     return []
   else
     return sorted
   end
+
 end

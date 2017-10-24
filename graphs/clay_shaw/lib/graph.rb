@@ -1,5 +1,5 @@
 class Vertex
-  attr_accessor :value, :in_edges, :out_edges
+  attr_reader :value, :in_edges, :out_edges
 
   def initialize(value)
   # typically reppd by dots
@@ -12,10 +12,11 @@ class Vertex
   def in_count
     @in_edges.length
   end
+
 end
 
 class Edge
-  attr_accessor :from_vertex, :to_vertex, :cost
+  attr_reader :from_vertex, :to_vertex, :cost
 
   def initialize(from_vertex, to_vertex, cost = 1)
     @from_vertex = from_vertex
@@ -45,3 +46,11 @@ end
 # 6. if destination has no more (IN) edges, push that element onto the queue
 # 7 push that into our results array
 # 8. continue until there is nothing left in our queue
+
+# Adjacency matrix are also useable without the Vertex and Edge class
+#   ______________
+#  |   A  B  C  D
+#  |A  0  1
+#  |B  1  0
+#  |C        0
+#  |D           0
