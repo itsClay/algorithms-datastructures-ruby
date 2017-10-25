@@ -7,6 +7,7 @@ require 'byebug'
 # dense graphs O(n**2)
 def topological_sort(vertices)
   sorted = []
+  # breadth first search (can swap to a stack for DFS)
   top = [] #queue
   # init a graph
   in_degrees = Hash.new
@@ -49,3 +50,12 @@ def topological_sort(vertices)
   end
 
 end
+
+# TARJANS usees depth first search (tracking whether or not you have
+# visited vertices)
+# explores nodes until they have no children or unvisited children
+# Once a node's connections have been exhausted it is unshifted
+# onto the result. Nodes that have later dependencies will be processed
+# before those that have earlier ones.
+# Each node and edge is visited once so time complexity is linear.
+# catching a cycle is tricky.
