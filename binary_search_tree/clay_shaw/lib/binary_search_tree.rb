@@ -11,6 +11,7 @@ class BinarySearchTree
   end
 
   def insert(value)
+    # O(log n)
     if @root && @root.value
       BinarySearchTree.insert!(@root, value)
     else
@@ -19,7 +20,6 @@ class BinarySearchTree
   end
 
   def find(value, tree_node = @root)
-    # debugger
     return nil if tree_node.nil?
     return tree_node if tree_node.value == value
 
@@ -40,62 +40,45 @@ class BinarySearchTree
 
   def delete(value)
     # Hibbard Deletion
-    # BinarySearchTree.delete!(@root, value)
     node = find(value)
-    p_node = find_parent(@root, value)
     return nil unless node
-    if node.value == value
+    parent_node = find_parent(@root, value)
 
+    if node.value == value
+      # no children
       if node.left.nil? && node.right.nil?
-        if p_node.nil?
+        if parent_node.nil?
           @root = nil
         else
-          value <= p_node.value ? p_node.left = nil : p_node.right = nil
+          value <= parent_node.value ? parent_node.left = nil : parent_node.right = nil
         end
       end
-
+      # 1 child
       if node.left.nil? || node.right.nil?
-        if p_node.nil?
+        if parent_node.nil?
           @root = nil
         else
           child_node = node.left || node.right
-          if value <= p_node.value
-            p_node.left = child_node
+          if value <= parent_node.value
+            parent_node.left = child_node
           else
-            p_node.right = child_node
+            parent_node.right = child_node
           end
         end
       end
-      # return node.left unless node.right
-      # return node.right unless node.left
-
-      # debugger
+      # 2 children
       if node.left && node.right
         left_node = node.left
-
         r = maximum(node.left)
-        r.right = node.right
-
+        
         if r.left
           left_node.right = r.left
         end
-
+        
+        r.right = node.right
         r.left = left_node
-
-        if value <= p_node.value
-          p_node.left = r
-        else
-          p_node.right = r
-        end
+        value <= parent_node.value ? parent_node.left = r : parent_node.right = r
       end
-      # set replacement new right
-      # set replacement new left while getting rid of itself.
-      # r.left = delete_maximum(node.left)
-
-    # elsif value < node.value
-    #   node.left = delete(node.left, value)
-    # else
-    #   node.right = delete(node.right, value)
     end
 
   end
@@ -112,18 +95,6 @@ class BinarySearchTree
   end
 
   def depth(tree_node = @root)
-    # return 0 if tree_node.nil? || (tree_node.left.nil? && tree_node.right.nil?)
-    #
-    # if tree_node.left && tree_node.right.nil?
-    #   right_height= -1
-    #   left_height = depth(tree_node.left)
-    # elsif tree_node.right && tree_node.left.nil?
-    #   left_height = -1
-    #   right_height = depth(tree_node.right)
-    # else # 2 children
-    #   left_height = depth(tree_node.left)
-    #   right_height = depth(tree_node.right)
-    # end
     if tree_node.nil?
       return -1
     else
@@ -139,9 +110,31 @@ class BinarySearchTree
   end
 
   def is_balanced?(tree_node = @root)
+    return true if tree_node.nil?
+
+    left = depth(tree_node.left)
+    right = depth(tree_node.right)
+    return false if (left - right).abs > 1
+    
+    if is_balanced?(tree_node.left) && is_balanced?(tree_node.right)
+      return true
+    end
+    false
   end
 
   def in_order_traversal(tree_node = @root, arr = [])
+    # each step continually mutates the arr
+    if tree_node.left
+      in_order_traversal(tree_node.left, arr)
+    end
+
+    arr.push(tree_node.value)
+
+    if tree_node.right
+      in_order_traversal(tree_node.right, arr)
+    end
+
+    arr
   end
 
   def find_parent(node, value)
@@ -150,9 +143,7 @@ class BinarySearchTree
     return node if node.left && node.left.value == value
     return node if node.right && node.right.value == value
     find_parent(node.left, value) || find_parent(node.right, value)
-
   end
-
 
   # optional helper methods go here:
   def self.insert!(node, value)
