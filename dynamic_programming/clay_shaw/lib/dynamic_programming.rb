@@ -76,8 +76,8 @@ class DynamicProgramming
         end
         result << new_way
       end
-      @frog_cache
     end
+    @frog_cache
   end
 
   def super_frog_hops(n, k)
@@ -119,6 +119,7 @@ class DynamicProgramming
 
   def make_change()
   # another great example but not on the specs
-  
+
+
   end
 end
