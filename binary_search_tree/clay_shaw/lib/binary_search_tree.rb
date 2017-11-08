@@ -5,7 +5,6 @@ require 'byebug'
 
 class BinarySearchTree
   attr_accessor :root
-  attr_reader :find
 
   def initialize
     @root = nil
@@ -42,27 +41,17 @@ class BinarySearchTree
   def delete(value)
     # Hibbard Deletion
     # BinarySearchTree.delete!(@root, value)
-    # node = find(value)
     node = find(value)
     p_node = find_parent(@root, value)
     return nil unless node
-    # debugger
     if node.value == value
 
-
       if node.left.nil? && node.right.nil?
-
         if p_node.nil?
           @root = nil
         else
-          p p_node
-          if value <= p_node.value
-            p_node.left = nil
-          else
-            p_node.right = nil
-          end
+          value <= p_node.value ? p_node.left = nil : p_node.right = nil
         end
-
       end
 
       if node.left.nil? || node.right.nil?

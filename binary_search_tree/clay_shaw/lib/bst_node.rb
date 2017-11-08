@@ -3,6 +3,7 @@ class BSTNode
 
   def initialize(value)
     @value = value
+    @parent = nil
     @left = nil
     @right = nil
   end
